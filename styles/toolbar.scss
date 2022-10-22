@@ -1,0 +1,30 @@
+#toolbar {
+  position: fixed;
+  -webkit-app-region: drag;
+  top: 0;
+  background: #f2f2f4;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  z-index: 4;
+  border-bottom: 1px solid #ddd;
+  padding: 6px 1em;
+  padding-left: 80px;
+  font-size: 0.8em;
+  button {
+    border: none;
+    background: none;
+    font-size: 16px;
+    border-radius: 4px;
+    margin-right: 0;
+    color: #4a4e55;
+    outline: 0;
+    padding: 3px 12px;
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    &:active {
+      background: rgba(0, 0, 0, 0.12);
+    }
+  }
+}

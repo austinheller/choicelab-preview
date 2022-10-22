@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'strict-dynamic' 'nonce-choicelabNonce';"
+    />
+    <link href="./styles/font-awesome/fontawesome.min.css" rel="stylesheet" />
+    <link href="./styles/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="./style.css" rel="stylesheet" />
+    <link href="./print.css" rel="stylesheet" media="print" />
+    <script nonce="choicelabNonce">
+      global = globalThis; //<- this should be enough
+    </script>
+    <title>Choicelab Preview</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="launcher">
+      <div class="inner">
+        <div id="launcher-logo">
+          <img src="./assets/icon-mono.png" alt="Choicelab Icon" />
+          <h1>Choicelab <span>Preview</span></h1>
+        </div>
+        <div id="launcher-actions">
+          <button type="button" id="btn">Choose Project Folder</button>
+          <ul id="recent-projects"></ul>
+        </div>
+      </div>
+      <div class="drag-region"></div>
+    </div>
+    <script
+      nonce="choicelabNonce"
+      src="node_modules/@austinheller/choicelab/dist/choicelab.js"
+    ></script>
+    <script
+      nonce="choicelabNonce"
+      src="node_modules/react/umd/react.development.js"
+    ></script>
+    <script
+      nonce="choicelabNonce"
+      src="node_modules/react-dom/umd/react-dom.development.js"
+    ></script>
+    <script nonce="choicelabNonce" src="./renderer.js"></script>
+    <script
+      nonce="choicelabNonce"
+      src="http://localhost:35729/livereload.js?snipver=1"
+      async=""
+      defer=""
+    ></script>
+  </body>
+</html>
