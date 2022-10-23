@@ -45,6 +45,7 @@
     "mime-types": "^2.1.35",
     "mini-css-extract-plugin": "^2.2.2",
     "path": "^0.12.7",
+    "pinch-zoom-js": "^2.3.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass": "^1.54.9",

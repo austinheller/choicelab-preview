@@ -1,7 +1,13 @@
 /* global Choicelab */
 
+import {
+  setZoom,
+  zoomIn,
+  zoomOut,
+  enablePinchToZoom,
+} from "./viewer/viewer.zoom.js";
 import { Flowchart } from "./viewer/viewer.createPathEls.js";
-import { Toolbar, setZoom, zoomIn, zoomOut } from "./viewer/viewer.toolbar.js";
+import { Toolbar } from "./viewer/viewer.toolbar.js";
 import { positionScenesAsFlowchart } from "./viewer/viewer.positionScenes.js";
 import {
   getSetting,
@@ -171,11 +177,9 @@ Choicelab.on("scenesParsed", "loadViewer", () => {
           e.preventDefault();
         });
       });
-      // set zoom
-      setTimeout(() => {
-        document.querySelector("#flowchart").style.transition =
-          "transform 0.2s ease";
-      }, 1000);
+
+      enablePinchToZoom();
+
       const initialZoom = getSetting("zoom") ? getSetting("zoom") : 1.0;
       updateSetting("zoom", initialZoom);
       setTimeout(() => {

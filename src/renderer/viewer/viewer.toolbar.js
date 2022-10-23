@@ -1,35 +1,6 @@
 import React from "react";
 import { getSetting, updateSetting } from "./viewer.settings.js";
-
-function setZoom(value) {
-  value = parseFloat(value).toFixed(2);
-  document.querySelector("#flowchart").style.transform = `scale(${value})`;
-  updateSetting("zoom", value);
-}
-
-function zoomIn() {
-  const zoom = getSetting("zoom");
-  const step = 0.2;
-  let newZoom = parseFloat(zoom) + step;
-  if (newZoom > 1.2) {
-    newZoom = 1.2;
-  }
-  newZoom = parseFloat(newZoom).toFixed(2);
-  document.querySelector("#flowchart").style.transform = `scale(${newZoom})`;
-  updateSetting("zoom", newZoom);
-}
-
-function zoomOut() {
-  const zoom = getSetting("zoom");
-  const step = 0.2;
-  let newZoom = parseFloat(zoom) - step;
-  if (newZoom < 0.2) {
-    newZoom = 0.2;
-  }
-  newZoom = parseFloat(newZoom).toFixed(2);
-  document.querySelector("#flowchart").style.transform = `scale(${newZoom})`;
-  updateSetting("zoom", newZoom);
-}
+import { setZoom, zoomIn, zoomOut } from "./viewer.zoom.js";
 
 function openBrowser() {
   window.electron.openExternal("http://localhost:8000");
@@ -107,4 +78,4 @@ function Toolbar(props) {
   );
 }
 
-export { Toolbar, setZoom, zoomIn, zoomOut };
+export { Toolbar };

@@ -127,6 +127,9 @@ function setMenus(flowchartLoaded) {
       label: "View",
       submenu: [
         {
+          role: "reload",
+        },
+        {
           role: "toggleDevTools",
         },
       ],
