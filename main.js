@@ -33,6 +33,7 @@ let serverListener = null;
 let serverPort = null;
 let closeServer = null;
 let closeLivereload = null;
+let flowchartLoaded = false;
 
 async function handleFileOpen() {
   const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -96,29 +97,38 @@ function startServer(projectPath) {
   closeServer = gracefulShutdown(serverListener);
 }
 
-function setMenus(flowchartLoaded) {
+function setMenus(props) {
   const menuTemplate = [
     { role: "appMenu" },
     {
       label: "File",
       submenu: [
         {
+          label: "Show Launcher",
+          click: () => {
+            createWindow();
+          },
+          visible: props.flowchartLoaded === true ? false : true,
+          enabled: props.windowClosed === true ? true : false,
+        },
+        {
           label: "Print...",
           click: () => {
             printFlowchart();
           },
-          visible: flowchartLoaded === true ? true : false,
+          visible: props.flowchartLoaded === true ? true : false,
         },
         {
           label: "Save as PDF...",
           click: () => {
             savePDF();
           },
-          visible: flowchartLoaded === true ? true : false,
+          visible: props.flowchartLoaded === true ? true : false,
         },
         {
           role: "close",
-          label: flowchartLoaded === true ? "Close Project" : "Close Window",
+          label:
+            props.flowchartLoaded === true ? "Close Project" : "Close Window",
         },
       ],
     },
@@ -175,7 +185,10 @@ function setMenus(flowchartLoaded) {
 function createWindow() {
   const iconPath = path.resolve(__dirname, "./assets/icon.png");
   // Create the browser window.
-  setMenus(false);
+  setMenus({
+    flowchartLoaded: false,
+    windowClosed: false,
+  });
   const mainWindow = new BrowserWindow({
     width: 600,
     height: 400,
@@ -243,7 +256,10 @@ app.whenReady().then(() => {
     const mainWindow = BrowserWindow.getFocusedWindow();
     mainWindow.setSize(1000, 700);
     mainWindow.setResizable(true);
-    setMenus(true);
+    flowchartLoaded = true;
+    setMenus({
+      flowchartLoaded: true,
+    });
   });
   ipcMain.on("print_flowchart", (e) => {
     printFlowchart();
@@ -259,9 +275,17 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", async function () {
-  await closeServer();
-  await closeLivereload();
-  console.log("server closed");
+  setMenus({
+    flowchartLoaded: false,
+    windowClosed: true,
+  });
+  if (flowchartLoaded === true) {
+    await closeLivereload();
+    await closeServer().then(() => {
+      flowchartLoaded = false;
+      createWindow();
+    });
+  }
   if (process.platform !== "darwin") app.quit();
 });
 

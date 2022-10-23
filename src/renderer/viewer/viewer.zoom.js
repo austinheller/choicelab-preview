@@ -6,6 +6,8 @@ import {
 } from "./viewer.settings.js";
 
 var scale = getSetting("zoom");
+var scaleMin = 0.35,
+  scaleMax = 1;
 
 function setZoom(value) {
   value = parseFloat(value).toFixed(1);
@@ -18,8 +20,8 @@ function zoomIn() {
   // const zoom = getSetting("zoom");
   const step = 0.2;
   let newZoom = parseFloat(scale) + step;
-  if (newZoom > 1.2) {
-    newZoom = 1.2;
+  if (newZoom > scaleMax) {
+    newZoom = scaleMax;
   }
   newZoom = parseFloat(newZoom).toFixed(1);
   const flowchart = document.querySelector("#flowchart");
@@ -36,8 +38,8 @@ function zoomOut() {
   // const zoom = getSetting("zoom");
   const step = 0.2;
   let newZoom = parseFloat(scale) - step;
-  if (newZoom < 0.35) {
-    newZoom = 0.35;
+  if (newZoom < scaleMin) {
+    newZoom = scaleMin;
   }
   newZoom = parseFloat(newZoom).toFixed(2);
   const flowchart = document.querySelector("#flowchart");
@@ -65,9 +67,8 @@ var pointerXPercent = 0,
   pointerYPercent = 0;
 
 document.addEventListener("pointermove", (e) => {
-  pointerXPercent = e.x / window.innerWidth;
-  pointerYPercent = e.y / window.innerHeight;
-  console.log(pointerXPercent, pointerYPercent);
+  pointerXPercent = -1 + (e.x / window.innerWidth) * 2;
+  pointerYPercent = 0 + (e.y / window.innerHeight) * 3;
 });
 
 // https://kenneth.io/post/detecting-multi-touch-trackpad-gestures-in-javascript
@@ -76,18 +77,24 @@ function enablePinchToZoom() {
 
   var render = () => {
     window.requestAnimationFrame(() => {
-      if (scale < 0.35) scale = 0.35;
-      if (scale > 1.2) scale = 1.2;
+      if (scale < scaleMin) scale = scaleMin;
+      if (scale > scaleMax) scale = scaleMax;
       var val = `scale(${scale})`;
       updateSetting("zoom", scale);
+      const pointerFactorX = 10 / scale;
+      const pointerFactorY = 10 / scale;
+      window.scrollTo({
+        left: window.scrollX + pointerXPercent * pointerFactorX,
+        top: window.scrollY + pointerYPercent * pointerFactorY,
+        behavior: "instant",
+      });
       flowchart.style.transform = val;
-      // Here, we need to find a way to take the pointer's % on the screen, and negotiate that with the scroll position of the flowchart.
     });
   };
 
   window.addEventListener("wheel", (e) => {
     if (e.ctrlKey) {
-      scale -= e.deltaY * 0.0015;
+      scale -= e.deltaY * 0.0008;
       updateSetting("zoom", scale);
       render();
     }
