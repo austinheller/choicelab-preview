@@ -18,6 +18,7 @@ import {
 import { absolutePosition } from "./utils.js";
 
 function getProjectNameFromPath(path) {
+  if (typeof path !== "string") return false;
   const pathElsRaw = path.split(/([^\\^/]+)/g);
   let pathEls = [];
   pathElsRaw.forEach((el) => {
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProject();
 });
 
-Choicelab.on("scenesParsed", "loadViewer", () => {
+function loadViewer() {
   let recentProjects = getSetting("recent_projects");
   if (!recentProjects) {
     recentProjects = [];
@@ -226,4 +227,8 @@ Choicelab.on("scenesParsed", "loadViewer", () => {
   }
 
   ReactDOM.render(<App />, document.getElementById("root"));
+}
+
+Choicelab.on("scenesParsed", "loadViewer", () => {
+  loadViewer();
 });
